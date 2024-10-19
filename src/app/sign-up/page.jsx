@@ -1,21 +1,58 @@
-"use client";
-import React, { useState } from "react";
+'use client'
+
+import {
+  Flex,
+  Box,
+  FormControl,
+  FormLabel,
+  Input,
+  InputGroup,
+  HStack,
+  InputRightElement,
+  Stack,
+  Button,
+  Heading,
+  Text,
+  useColorModeValue,
+  Link,
+} from '@chakra-ui/react'
+import { useState } from 'react'
+import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
 import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
 import { auth } from "../firebase/firebaseConfig";
 
-const Signup = () => {
+export default function SignupCard() {
+  // State for form fields
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  
+  const [createUserWithEmailAndPassword] = useCreateUserWithEmailAndPassword(auth);
 
-  const [createUserWithEmailAndPassword] =
-    useCreateUserWithEmailAndPassword(auth);
-
+  // Handle sign up and form submission
   const handleSignup = async (e) => {
     e.preventDefault();
     try {
+      // Capture the user's email and password during sign up
       const res = await createUserWithEmailAndPassword(email, password);
       console.log("User signed up:", res.user);
+      
+      // Optionally, store additional user data like first and last name in a database or authentication system
+      const userData = {
+        firstName,
+        lastName,
+        email: res.user.email,
+      };
+      console.log("User data:", userData);
+
+      // Store user status in session storage
       sessionStorage.setItem("user", true);
+
+      // Clear the form fields after submission
+      setFirstName("");
+      setLastName("");
       setEmail("");
       setPassword("");
     } catch (e) {
@@ -23,65 +60,97 @@ const Signup = () => {
     }
   };
 
-  const handleGithubSignup = () => {
-    console.log("Signing up with GitHub");
-  };
-
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-900 text-white">
-      <div className="w-full max-w-md p-6 bg-gray-800 rounded-lg shadow-lg">
-        <h2 className="mb-6 text-2xl font-bold text-center">Sign Up</h2>
-        <form onSubmit={handleSignup}>
-          <div className="mb-4">
-            <label className="block mb-2 text-sm font-medium" htmlFor="email">
-              Email
-            </label>
-            <input
-              type="email"
-              id="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="w-full p-2 bg-gray-700 border border-gray-600 rounded focus:outline-none focus:ring focus:ring-blue-500"
-            />
-          </div>
-          <div className="mb-6">
-            <label
-              className="block mb-2 text-sm font-medium"
-              htmlFor="password"
-            >
-              Password
-            </label>
-            <input
-              type="password"
-              id="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              className="w-full p-2 bg-gray-700 border border-gray-600 rounded focus:outline-none focus:ring focus:ring-blue-500"
-            />
-          </div>
-          <button
-            type="submit"
-            className="w-full p-2 bg-blue-600 rounded hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300"
-          >
-            Sign Up
-          </button>
-        </form>
-        <div className="flex items-center justify-between mt-4">
-          <hr className="flex-grow border-gray-600" />
-          <span className="mx-2 text-sm">OR</span>
-          <hr className="flex-grow border-gray-600" />
-        </div>
-        <button
-          onClick={handleGithubSignup}
-          className="w-full mt-4 p-2 text-white bg-gray-700 rounded hover:bg-gray-600 focus:outline-none focus:ring focus:ring-gray-500"
-        >
-          Sign Up with GitHub
-        </button>
-      </div>
-    </div>
+    <Flex
+      minH={'100vh'}
+      align={'center'}
+      justify={'center'}
+      bg={useColorModeValue('gray.50', 'gray.800')}>
+      <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
+        <Stack align={'center'}>
+          <Heading fontSize={'4xl'} textAlign={'center'}>
+            Sign up
+          </Heading>
+          <Text fontSize={'lg'} color={'gray.600'}>
+            to enjoy all of our cool features ✌️
+          </Text>
+        </Stack>
+        <Box
+          rounded={'lg'}
+          bg={useColorModeValue('white', 'gray.700')}
+          boxShadow={'lg'}
+          p={8}>
+          <form onSubmit={handleSignup}>
+            <Stack spacing={4}>
+              <HStack>
+                <Box>
+                  <FormControl id="firstName" isRequired>
+                    <FormLabel>First Name</FormLabel>
+                    <Input 
+                      type="text" 
+                      value={firstName}
+                      onChange={(e) => setFirstName(e.target.value)}
+                    />
+                  </FormControl>
+                </Box>
+                <Box>
+                  <FormControl id="lastName">
+                    <FormLabel>Last Name</FormLabel>
+                    <Input 
+                      type="text" 
+                      value={lastName}
+                      onChange={(e) => setLastName(e.target.value)}
+                    />
+                  </FormControl>
+                </Box>
+              </HStack>
+              <FormControl id="email" isRequired>
+                <FormLabel>Email address</FormLabel>
+                <Input 
+                  type="email" 
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </FormControl>
+              <FormControl id="password" isRequired>
+                <FormLabel>Password</FormLabel>
+                <InputGroup>
+                  <Input 
+                    type={showPassword ? 'text' : 'password'}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+                  <InputRightElement h={'full'}>
+                    <Button
+                      variant={'ghost'}
+                      onClick={() => setShowPassword((showPassword) => !showPassword)}>
+                      {showPassword ? <ViewIcon /> : <ViewOffIcon />}
+                    </Button>
+                  </InputRightElement>
+                </InputGroup>
+              </FormControl>
+              <Stack spacing={10} pt={2}>
+                <Button
+                  type="submit"
+                  loadingText="Submitting"
+                  size="lg"
+                  bg={'blue.400'}
+                  color={'white'}
+                  _hover={{
+                    bg: 'blue.500',
+                  }}>
+                  Sign up
+                </Button>
+              </Stack>
+              <Stack pt={6}>
+                <Text align={'center'}>
+                  Already a user? <Link color={'blue.400'}>Login</Link>
+                </Text>
+              </Stack>
+            </Stack>
+          </form>
+        </Box>
+      </Stack>
+    </Flex>
   );
-};
-
-export default Signup;
+}

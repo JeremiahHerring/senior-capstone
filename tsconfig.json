@@ -21,6 +21,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/sign-up/page.jsx", "src/app/firebase/firebaseConfig.js"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/sign-up/page.jsx", "src/app/firebase/firebaseConfig.js", "src/app/page.jsx"],
   "exclude": ["node_modules"]
 }
