@@ -15,6 +15,7 @@ import {
   useColorModeValue,
   useBreakpointValue,
   useDisclosure,
+  Image,
 } from '@chakra-ui/react'
 import {
   HamburgerIcon,
@@ -49,14 +50,12 @@ export default function Navbar() {
             aria-label={'Toggle Navigation'}
           />
         </Flex>
-        <Flex flex={{ base: 1 }} justify={{ base: 'center', md: 'start' }}>
-          <Text
-            textAlign={useBreakpointValue({ base: 'center', md: 'left' })}
-            fontFamily={'heading'}
-            color={useColorModeValue('gray.800', 'white')}>
-            Logo
-          </Text>
-
+        <Flex flex={{ base: 1 }} justify={{ base: 'center', md: 'start' }} align="center">
+          <Image
+            src="./assets/logo.png"
+            alt="Logo"
+            height="100px"
+            />
           <Flex display={{ base: 'none', md: 'flex' }} ml={10}>
             <DesktopNav />
           </Flex>
@@ -243,41 +242,39 @@ interface NavItem {
 
 const NAV_ITEMS: Array<NavItem> = [
   {
+    label: 'Learning Modules',
+    children: [
+      {
+        label: 'Explore Data Structures',
+        href: '#',
+      },
+      {
+        label: 'Explore Algorithms',
+        href: '#',
+      },
+    ],
+  },
+  {
     label: 'Inspiration',
     children: [
       {
-        label: 'Explore Design Work',
-        subLabel: 'Trending Design to inspire you',
+        label: 'Technical Interview Preparation',
+        subLabel: 'Help people achieve their dreams by breaking through the technical interview!',
         href: '#',
       },
       {
-        label: 'New & Noteworthy',
-        subLabel: 'Up-and-coming Designers',
+        label: 'Mastery of DSA',
+        subLabel: 'Give people the opportunity to master data structures and algorithms with an all-in-one learning platform',
         href: '#',
       },
     ],
   },
   {
-    label: 'Find Work',
-    children: [
-      {
-        label: 'Job Board',
-        subLabel: 'Find your dream design job',
-        href: '#',
-      },
-      {
-        label: 'Freelance Projects',
-        subLabel: 'An exclusive list for contract work',
-        href: '#',
-      },
-    ],
-  },
-  {
-    label: 'Learn Design',
+    label: 'About',
     href: '#',
   },
   {
-    label: 'Hire Designers',
+    label: 'Contact',
     href: '#',
   },
 ]
