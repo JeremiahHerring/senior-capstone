@@ -15,11 +15,25 @@ import {
   Text,
   useColorModeValue,
   Link,
+  useToast,
 } from '@chakra-ui/react'
 import { useState } from 'react'
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
 import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
-import { auth } from "../firebase/firebaseConfig";
+import { auth, db } from "../firebase/firebaseConfig";
+import { collection, addDoc } from "firebase/firestore";
+import { useRouter } from 'next/navigation';
+
+async function addUserToDatabase(userData) {
+  try {
+    const userRef = await addDoc(collection(db, "users"), userData);
+    console.log("User added to database with ID:", userRef.id);
+    return true;
+} catch (error) {
+    console.error("Error adding user to database", error);
+    return false;
+  }
+}
 
 export default function SignupCard() {
   // State for form fields
@@ -28,8 +42,11 @@ export default function SignupCard() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const router = useRouter()
   
   const [createUserWithEmailAndPassword] = useCreateUserWithEmailAndPassword(auth);
+
+  const toast = useToast();
 
   // Handle sign up and form submission
   const handleSignup = async (e) => {
@@ -39,13 +56,16 @@ export default function SignupCard() {
       const res = await createUserWithEmailAndPassword(email, password);
       console.log("User signed up:", res.user);
       
-      // Optionally, store additional user data like first and last name in a database or authentication system
       const userData = {
         firstName,
         lastName,
         email: res.user.email,
       };
-      console.log("User data:", userData);
+      
+      const added = await addUserToDatabase(userData);
+      if (added) {
+        console.log("User added to database successfully");
+      }
 
       // Store user status in session storage
       sessionStorage.setItem("user", true);
@@ -55,10 +75,27 @@ export default function SignupCard() {
       setLastName("");
       setEmail("");
       setPassword("");
-    } catch (e) {
-      console.error("Error signing up:", e);
+      router.push("/dashboard");
+    } catch (error) {
+      if (error.code === 'auth/email-already-in-use') {
+        toast({
+          title: "Email already in use.",
+          description: "Please use a different email or log in.",
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+        });
+      } else {
+        toast({
+          title: "Sign up error.",
+          description: "Something went wrong during sign up. Please try again.",
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+        });
     }
   };
+};
 
   return (
     <Flex
