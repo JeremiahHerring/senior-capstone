@@ -8,6 +8,7 @@ import {
   SimpleGrid,
   Stack,
   Text,
+  Image,
   useColorModeValue,
 } from '@chakra-ui/react'
 
@@ -43,11 +44,15 @@ export default function Footer() {
         <SimpleGrid
           templateColumns={{ sm: '1fr 1fr', md: '2fr 1fr 1fr 1fr 1fr' }}
           spacing={8}>
-          <Stack spacing={6}>
+          <Stack spacing={6} display="flex" justifyContent="center" alignItems="center">
             <Box>
-              <Logo color={useColorModeValue('gray.700', 'white')} />
+              <Image 
+              src="./assets/logo.png"
+              alt="logo"
+              height="150px"
+              />
             </Box>
-            <Text fontSize={'sm'}>© 2022 Chakra Templates. All rights reserved</Text>
+            <Text fontSize={'sm'}>©2024 AlgoMastery. All rights reserved</Text>
           </Stack>
           <Stack align={'flex-start'}>
             <ListHeader>Product</ListHeader>
