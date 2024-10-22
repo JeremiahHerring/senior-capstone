@@ -66,7 +66,7 @@ export default function Navbar() {
           justify={'flex-end'}
           direction={'row'}
           spacing={6}>
-          <Button as={'a'} fontSize={'sm'} fontWeight={400} variant={'link'} href={'sign-in'}>
+          <Button as={'a'} fontSize={'sm'} fontWeight={400} variant={'link'} href={'sign-in'} data-id={'open-sign-in-btn'}>
             Sign In
           </Button>
           <Button
