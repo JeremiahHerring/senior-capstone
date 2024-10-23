@@ -52,8 +52,11 @@ export default function Navbar() {
         </Flex>
         <Flex flex={{ base: 1 }} justify={{ base: 'center', md: 'start' }} align="center">
           <Image
+            data-id="logo"
             src="./assets/logo.png"
             alt="Logo"
+            onClick={() => window.location.href = '/'}
+            _hover={{ cursor: 'pointer' }}
             height="100px"
             />
           <Flex display={{ base: 'none', md: 'flex' }} ml={10}>
@@ -70,6 +73,7 @@ export default function Navbar() {
             Sign In
           </Button>
           <Button
+            data-id={'open-sign-up-btn'}
             as={'a'}
             display={{ base: 'none', md: 'inline-flex' }}
             fontSize={'sm'}
