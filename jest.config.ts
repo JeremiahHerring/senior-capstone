@@ -10,6 +10,10 @@ const createJestConfig = nextJest({
 const config: Config = {
   coverageProvider: 'v8',
   testEnvironment: 'jsdom',
+  moduleNameMapper: {
+    "^firebase/(.*)$": "<rootDir>/__mocks__/firebase/$1"
+  },
+  setupFiles: ["dotenv/config"],
   // Add more setup options before each test is run
   // setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
 }

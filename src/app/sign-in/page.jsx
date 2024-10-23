@@ -18,7 +18,7 @@ import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth';
 import { auth } from '../firebase/firebaseConfig';
 import { useRouter } from 'next/navigation';
 
-export default function SimpleCard() {
+export default function SigninCard() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const router = useRouter();
