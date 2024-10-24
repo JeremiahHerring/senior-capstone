@@ -1,32 +1,58 @@
-import { render, screen } from "@testing-library/react";
-import SignupCard from "@/app/sign-up/page"; // Adjust the path as needed
-import { useRouter } from "next/router";
+import SignupCard from '@/app/sign-up/page'; 
+import React from 'react';
+import { render, screen } from '@testing-library/react';
+import { ChakraProvider } from '@chakra-ui/react';
+import { useRouter } from 'next/navigation';
 
-jest.mock("next/router", () => ({
+jest.mock('next/navigation', () => ({
   useRouter: jest.fn(),
 }));
 
-describe("SignupCard", () => {
+describe('SignupCard', () => {
   beforeEach(() => {
-    // Mock the router implementation
-    (useRouter as jest.Mock).mockImplementation(() => ({
-      push: jest.fn(),
-      pathname: "/sign-up", // you can adjust the pathname as needed
-      query: {},
-      asPath: "/sign-up", // adjust as necessary
-    }));
-    
-    // Render the SignupCard directly
-    render(<SignupCard />);
+    useRouter.mockReturnValue({
+      push: jest.fn(), 
+    });
+
+    render(
+      <ChakraProvider>
+        <SignupCard />
+      </ChakraProvider>
+    );
   });
 
-  it("renders signup form", () => {
-    expect(screen.getByLabelText(/First Name/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/Last Name/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/Email address/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/Password/i)).toBeInTheDocument();
-    expect(screen.getByText(/Sign up/i)).toBeInTheDocument();
+  it('renders the heading', () => {
+    const heading = screen.getByRole('heading', { name: /sign up/i });
+    expect(heading).toBeInTheDocument();
   });
 
-  // Additional tests...
+  it('renders the first name input', () => {
+    const firstNameInput = screen.getByLabelText(/first name/i);
+    expect(firstNameInput).toBeInTheDocument();
+  });
+
+  it('renders the last name input', () => {
+    const lastNameInput = screen.getByLabelText(/last name/i);
+    expect(lastNameInput).toBeInTheDocument();
+  });
+
+  it('renders the email input', () => {
+    const emailInput = screen.getByLabelText(/email address/i);
+    expect(emailInput).toBeInTheDocument();
+  });
+
+  it('renders the password input', () => {
+    const passwordInput = screen.getByLabelText(/password/i);
+    expect(passwordInput).toBeInTheDocument();
+  });
+
+  it('renders the sign up button', () => {
+    const signUpButton = screen.getByRole('button', { name: /sign up/i });
+    expect(signUpButton).toBeInTheDocument();
+  });
+
+  it('renders the login link', () => {
+    const loginLink = screen.getByText(/already a user\?/i);
+    expect(loginLink).toBeInTheDocument();
+  });
 });
