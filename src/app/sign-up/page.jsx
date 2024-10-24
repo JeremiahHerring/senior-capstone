@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import {
   Flex,
@@ -16,20 +16,20 @@ import {
   useColorModeValue,
   Link,
   useToast,
-} from '@chakra-ui/react'
-import { useState } from 'react'
-import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
+} from "@chakra-ui/react";
+import { useState } from "react";
+import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
 import { auth, db } from "../firebase/firebaseConfig";
 import { collection, addDoc } from "firebase/firestore";
-import { useRouter } from 'next/navigation';
+import { useRouter } from "next/navigation";
 
-async function addUserToDatabase(userData) {
+export async function addUserToDatabase(userData) {
   try {
     const userRef = await addDoc(collection(db, "users"), userData);
     console.log("User added to database with ID:", userRef.id);
     return true;
-} catch (error) {
+  } catch (error) {
     console.error("Error adding user to database", error);
     return false;
   }
@@ -42,9 +42,10 @@ export default function SignupCard() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const router = useRouter()
-  
-  const [createUserWithEmailAndPassword] = useCreateUserWithEmailAndPassword(auth);
+  const router = useRouter();
+
+  const [createUserWithEmailAndPassword] =
+    useCreateUserWithEmailAndPassword(auth);
 
   const toast = useToast();
 
@@ -55,13 +56,13 @@ export default function SignupCard() {
       // Capture the user's email and password during sign up
       const res = await createUserWithEmailAndPassword(email, password);
       console.log("User signed up:", res.user);
-      
+
       const userData = {
         firstName,
         lastName,
         email: res.user.email,
       };
-      
+
       const added = await addUserToDatabase(userData);
       if (added) {
         console.log("User added to database successfully");
@@ -77,7 +78,7 @@ export default function SignupCard() {
       setPassword("");
       router.push("/dashboard");
     } catch (error) {
-      if (error.code === 'auth/email-already-in-use') {
+      if (error.code === "auth/email-already-in-use") {
         toast({
           title: "Email already in use.",
           description: "Please use a different email or log in.",
@@ -93,38 +94,40 @@ export default function SignupCard() {
           duration: 5000,
           isClosable: true,
         });
+      }
     }
   };
-};
 
   return (
     <Flex
-      minH={'100vh'}
-      align={'center'}
-      justify={'center'}
-      bg={useColorModeValue('gray.50', 'gray.800')}>
-      <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
-        <Stack align={'center'}>
-          <Heading fontSize={'4xl'} textAlign={'center'}>
+      minH={"100vh"}
+      align={"center"}
+      justify={"center"}
+      bg={useColorModeValue("gray.50", "gray.800")}
+    >
+      <Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6}>
+        <Stack align={"center"}>
+          <Heading fontSize={"4xl"} textAlign={"center"}>
             Sign up
           </Heading>
-          <Text fontSize={'lg'} color={'gray.600'}>
+          <Text fontSize={"lg"} color={"gray.600"}>
             to enjoy all of our cool features ✌️
           </Text>
         </Stack>
         <Box
-          rounded={'lg'}
-          bg={useColorModeValue('white', 'gray.700')}
-          boxShadow={'lg'}
-          p={8}>
+          rounded={"lg"}
+          bg={useColorModeValue("white", "gray.700")}
+          boxShadow={"lg"}
+          p={8}
+        >
           <form onSubmit={handleSignup}>
             <Stack spacing={4}>
               <HStack>
                 <Box>
                   <FormControl id="firstName" isRequired>
                     <FormLabel>First Name</FormLabel>
-                    <Input 
-                      type="text" 
+                    <Input
+                      type="text"
                       value={firstName}
                       onChange={(e) => setFirstName(e.target.value)}
                     />
@@ -133,8 +136,8 @@ export default function SignupCard() {
                 <Box>
                   <FormControl id="lastName">
                     <FormLabel>Last Name</FormLabel>
-                    <Input 
-                      type="text" 
+                    <Input
+                      type="text"
                       value={lastName}
                       onChange={(e) => setLastName(e.target.value)}
                     />
@@ -143,8 +146,8 @@ export default function SignupCard() {
               </HStack>
               <FormControl id="email" isRequired>
                 <FormLabel>Email address</FormLabel>
-                <Input 
-                  type="email" 
+                <Input
+                  type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                 />
@@ -152,15 +155,18 @@ export default function SignupCard() {
               <FormControl id="password" isRequired>
                 <FormLabel>Password</FormLabel>
                 <InputGroup>
-                  <Input 
-                    type={showPassword ? 'text' : 'password'}
+                  <Input
+                    type={showPassword ? "text" : "password"}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                   />
-                  <InputRightElement h={'full'}>
+                  <InputRightElement h={"full"}>
                     <Button
-                      variant={'ghost'}
-                      onClick={() => setShowPassword((showPassword) => !showPassword)}>
+                      variant={"ghost"}
+                      onClick={() =>
+                        setShowPassword((showPassword) => !showPassword)
+                      }
+                    >
                       {showPassword ? <ViewIcon /> : <ViewOffIcon />}
                     </Button>
                   </InputRightElement>
@@ -171,17 +177,18 @@ export default function SignupCard() {
                   type="submit"
                   loadingText="Submitting"
                   size="lg"
-                  bg={'blue.400'}
-                  color={'white'}
+                  bg={"blue.400"}
+                  color={"white"}
                   _hover={{
-                    bg: 'blue.500',
-                  }}>
+                    bg: "blue.500",
+                  }}
+                >
                   Sign up
                 </Button>
               </Stack>
               <Stack pt={6}>
-                <Text align={'center'}>
-                  Already a user? <Link color={'blue.400'}>Login</Link>
+                <Text align={"center"}>
+                  Already a user? <Link color={"blue.400"}>Login</Link>
                 </Text>
               </Stack>
             </Stack>
