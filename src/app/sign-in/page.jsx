@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   Flex,
   Box,
@@ -13,14 +13,14 @@ import {
   Heading,
   Text,
   useColorModeValue,
-} from '@chakra-ui/react';
-import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth';
-import { auth } from '../firebase/firebaseConfig';
-import { useRouter } from 'next/navigation';
+} from "@chakra-ui/react";
+import { useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
+import { auth } from "../firebase/firebaseConfig";
+import { useRouter } from "next/navigation";
 
 export default function SigninCard() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const router = useRouter();
 
   const [signinWithEmailAndPassword] = useSignInWithEmailAndPassword(auth);
@@ -30,39 +30,41 @@ export default function SigninCard() {
     e.preventDefault();
     try {
       const res = await signinWithEmailAndPassword(email, password);
-      console.log('User signed in:', res.user);
-      sessionStorage.setItem('user', true);
+      console.log("User signed in:", res.user);
+      sessionStorage.setItem("user", true);
 
       // Clear form fields after successful sign-in
-      setEmail('');
-      setPassword('');
-      
+      setEmail("");
+      setPassword("");
+
       // Redirect to dashboard
-      router.push('/dashboard');
+      router.push("/dashboard");
     } catch (e) {
-      console.error('Error signing in:', e);
+      console.error("Error signing in:", e);
     }
   };
 
   const handleGithubSignin = () => {
-    console.log('Signing in with GitHub');
+    console.log("Signing in with GitHub");
   };
 
   return (
     <Flex
-      minH={'100vh'}
-      align={'center'}
-      justify={'center'}
-      bg={useColorModeValue('gray.50', 'gray.800')}>
-      <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
-        <Stack align={'center'}>
-          <Heading fontSize={'4xl'}>Sign in to your account</Heading>
+      minH={"100vh"}
+      align={"center"}
+      justify={"center"}
+      bg={useColorModeValue("gray.50", "gray.800")}
+    >
+      <Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6}>
+        <Stack align={"center"}>
+          <Heading fontSize={"4xl"}>Sign in to your account</Heading>
         </Stack>
         <Box
-          rounded={'lg'}
-          bg={useColorModeValue('white', 'gray.700')}
-          boxShadow={'lg'}
-          p={8}>
+          rounded={"lg"}
+          bg={useColorModeValue("white", "gray.700")}
+          boxShadow={"lg"}
+          p={8}
+        >
           <form onSubmit={handleSignin}>
             <Stack spacing={4}>
               <FormControl id="email" isRequired>
@@ -83,19 +85,21 @@ export default function SigninCard() {
               </FormControl>
               <Stack spacing={10}>
                 <Stack
-                  direction={{ base: 'column', sm: 'row' }}
-                  align={'start'}
-                  justify={'space-between'}>
+                  direction={{ base: "column", sm: "row" }}
+                  align={"start"}
+                  justify={"space-between"}
+                >
                   <Checkbox>Remember me</Checkbox>
-                  <Text color={'blue.400'}>Forgot password?</Text>
+                  <Text color={"blue.400"}>Forgot password?</Text>
                 </Stack>
                 <Button
                   type="submit"
-                  bg={'blue.400'}
-                  color={'white'}
+                  bg={"blue.400"}
+                  color={"white"}
                   _hover={{
-                    bg: 'blue.500',
-                  }}>
+                    bg: "blue.500",
+                  }}
+                >
                   Sign in
                 </Button>
               </Stack>
@@ -108,9 +112,10 @@ export default function SigninCard() {
             onClick={handleGithubSignin}
             w="full"
             mt={4}
-            bg={'gray.700'}
-            color={'white'}
-            _hover={{ bg: 'gray.600' }}>
+            bg={"gray.700"}
+            color={"white"}
+            _hover={{ bg: "gray.600" }}
+          >
             Sign in with GitHub
           </Button>
         </Box>

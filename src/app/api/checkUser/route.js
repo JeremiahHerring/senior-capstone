@@ -4,7 +4,6 @@ import { initializeApp, getApps, applicationDefault } from "firebase-admin/app";
 
 // Initialize Firebase Admin SDK only if not already initialized
 if (!getApps().length) {
-
   initializeApp({
     credential: applicationDefault(),
   });

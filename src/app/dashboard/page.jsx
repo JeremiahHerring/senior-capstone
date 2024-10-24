@@ -1,9 +1,9 @@
-'use client'
-import { useAuthState } from 'react-firebase-hooks/auth';
+"use client";
+import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../firebase/firebaseConfig";
 import { useRouter } from "next/navigation";
 import { signOut } from "firebase/auth";
-import MultistepForm from '../components/MultistepForm'; 
+import MultistepForm from "../components/MultistepForm";
 
 export default function Dashboard() {
   const [user] = useAuthState(auth);
