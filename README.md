@@ -1,7 +1,3 @@
-Certainly! Below is the README formatted version of your setup guide:
-
----
-
 # **Senior Capstone Project**
 
 Welcome to the Senior Capstone project! This document will guide you through the process of setting up, running, and testing the application.
