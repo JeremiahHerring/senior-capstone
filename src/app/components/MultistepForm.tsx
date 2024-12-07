@@ -1,5 +1,3 @@
-"use client";
-
 import { useState } from "react";
 import {
   Progress,
@@ -16,9 +14,8 @@ import {
   SimpleGrid,
   Textarea,
   FormHelperText,
+  useToast,
 } from "@chakra-ui/react";
-
-import { useToast } from "@chakra-ui/react";
 
 const Form1 = () => {
   return (
@@ -30,10 +27,7 @@ const Form1 = () => {
         <FormLabel htmlFor="ds_algo_knowledge" fontWeight={"normal"}>
           How would you rate your knowledge of Data Structures and Algorithms?
         </FormLabel>
-        <Select
-          id="ds_algo_knowledge"
-          placeholder="Select your knowledge level"
-        >
+        <Select id="ds_algo_knowledge" placeholder="Select your knowledge level">
           <option value="beginner">Beginner</option>
           <option value="intermediate">Intermediate</option>
           <option value="advanced">Advanced</option>
@@ -99,8 +93,7 @@ const Form3 = () => {
             focusBorderColor="brand.400"
           />
           <FormHelperText>
-            Any additional information that might help us tailor your
-            experience.
+            Any additional information that might help us tailor your experience.
           </FormHelperText>
         </FormControl>
       </SimpleGrid>
@@ -108,84 +101,77 @@ const Form3 = () => {
   );
 };
 
-export default function MultistepForm() {
+export default function MultistepForm({ onComplete }) {
   const toast = useToast();
   const [step, setStep] = useState(1);
   const [progress, setProgress] = useState(33.33);
 
+  const handleNext = () => {
+    setStep(step + 1);
+    setProgress((prevProgress) => Math.min(prevProgress + 33.33, 100));
+  };
+
+  const handleBack = () => {
+    setStep(step - 1);
+    setProgress((prevProgress) => Math.max(prevProgress - 33.33, 33.33));
+  };
+
+  const handleSubmit = () => {
+    toast({
+      title: "Questionnaire submitted.",
+      description: "Thank you for sharing your feedback!",
+      status: "success",
+      duration: 3000,
+      isClosable: true,
+    });
+
+    // Trigger the onComplete callback to inform the Dashboard component
+    onComplete();
+  };
+
   return (
-    <>
-      <Box
-        borderWidth="1px"
-        rounded="lg"
-        shadow="1px 1px 3px rgba(0,0,0,0.3)"
-        maxWidth={800}
-        p={6}
-        m="10px auto"
-        as="form"
-      >
-        <Progress
-          hasStripe
-          value={progress}
-          mb="5%"
-          mx="5%"
-          isAnimated
-        ></Progress>
-        {step === 1 ? <Form1 /> : step === 2 ? <Form2 /> : <Form3 />}
-        <ButtonGroup mt="5%" w="100%">
-          <Flex w="100%" justifyContent="space-between">
-            <Flex>
-              <Button
-                onClick={() => {
-                  setStep(step - 1);
-                  setProgress(progress - 33.33);
-                }}
-                isDisabled={step === 1}
-                colorScheme="teal"
-                variant="solid"
-                w="7rem"
-                mr="5%"
-              >
-                Back
-              </Button>
+    <Box
+      borderWidth="1px"
+      rounded="lg"
+      shadow="1px 1px 3px rgba(0,0,0,0.3)"
+      maxWidth={800}
+      p={6}
+      m="10px auto"
+      as="form"
+    >
+      <Progress hasStripe value={progress} mb="5%" mx="5%" isAnimated></Progress>
+      {step === 1 ? <Form1 /> : step === 2 ? <Form2 /> : <Form3 />}
+      <ButtonGroup mt="5%" w="100%">
+        <Flex w="100%" justifyContent="space-between">
+          <Flex>
+            <Button
+              onClick={handleBack}
+              isDisabled={step === 1}
+              colorScheme="teal"
+              variant="solid"
+              w="7rem"
+              mr="5%"
+            >
+              Back
+            </Button>
+            {step < 3 && (
               <Button
                 w="7rem"
-                isDisabled={step === 3}
-                onClick={() => {
-                  setStep(step + 1);
-                  if (step === 3) {
-                    setProgress(100);
-                  } else {
-                    setProgress(progress + 33.33);
-                  }
-                }}
+                onClick={handleNext}
                 colorScheme="teal"
                 variant="outline"
               >
                 Next
               </Button>
-            </Flex>
-            {step === 3 ? (
-              <Button
-                w="7rem"
-                colorScheme="red"
-                variant="solid"
-                onClick={() => {
-                  toast({
-                    title: "Questionnaire submitted.",
-                    description: "Thank you for sharing your feedback!",
-                    status: "success",
-                    duration: 3000,
-                    isClosable: true,
-                  });
-                }}
-              >
-                Submit
-              </Button>
-            ) : null}
+            )}
           </Flex>
-        </ButtonGroup>
-      </Box>
-    </>
+          {step === 3 && (
+            <Button w="7rem" colorScheme="red" variant="solid" onClick={handleSubmit}>
+              Submit
+            </Button>
+          )}
+        </Flex>
+      </ButtonGroup>
+    </Box>
   );
 }
