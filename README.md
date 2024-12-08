@@ -17,7 +17,9 @@ Welcome to my Senior Capstone project! This document will guide you through the 
 
 ## **Introduction**
 
-If you're a user who wants to access the application, simply go to the website link: [link](https://algo-mastery.netlify.app/)
+If you're a user who wants to access the application, simply go to the website link: [algo-mastery](https://algo-mastery.netlify.app/)
+
+Otherwise, please follow the instructions below if you want to contribute or run the source code. 
 
 ## **Prerequisites**
 
