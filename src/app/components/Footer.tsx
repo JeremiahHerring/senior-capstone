@@ -38,7 +38,7 @@ export default function Footer() {
             alignItems="center"
           >
             <Box>
-              <Image src="./assets/logo.png" alt="logo" height="150px" />
+              <Image src="../assets/logo.png" alt="logo" height="150px" />
             </Box>
             <Text fontSize={"sm"}>©2024 AlgoMastery. All rights reserved</Text>
           </Stack>
