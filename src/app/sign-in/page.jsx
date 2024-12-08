@@ -13,6 +13,7 @@ import {
   Heading,
   Text,
   useColorModeValue,
+  Link,
 } from "@chakra-ui/react";
 import { useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
 import { auth } from "../firebase/firebaseConfig";
@@ -42,10 +43,6 @@ export default function SigninCard() {
     } catch (e) {
       console.error("Error signing in:", e);
     }
-  };
-
-  const handleGithubSignin = () => {
-    console.log("Signing in with GitHub");
   };
 
   return (
@@ -108,16 +105,14 @@ export default function SigninCard() {
           <div className="flex items-center justify-between mt-4">
             <hr className="flex-grow border-gray-600" />
           </div>
-          <Button
-            onClick={handleGithubSignin}
-            w="full"
-            mt={4}
-            bg={"gray.700"}
-            color={"white"}
-            _hover={{ bg: "gray.600" }}
-          >
-            Sign in with GitHub
-          </Button>
+          <Stack pt={6}>
+            <Text align={"center"}>
+              Not a user?{" "}
+              <Link href="/sign-up" color={"blue.400"}>
+                Sign up
+              </Link>
+            </Text>
+          </Stack>
         </Box>
       </Stack>
     </Flex>

@@ -1,8 +1,10 @@
 "use client";
 
 import { Box, Heading, Container, Text, Button, Stack } from "@chakra-ui/react";
+import { useRouter } from "next/navigation";
 
 export default function Hero() {
+  const router = useRouter();
   return (
     <>
       <Container maxW={"3xl"}>
@@ -42,6 +44,7 @@ export default function Hero() {
               _hover={{
                 bg: "green.500",
               }}
+              onClick={() => {router.push("/dashboard")}}
             >
               Get Started
             </Button>
