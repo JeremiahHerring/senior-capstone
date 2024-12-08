@@ -41,7 +41,7 @@
     "src/app/page.jsx",
     "jest.config.ts",
     "cypress.config.js"
-, "src/app/algorithms/BFS/page.jsx", "src/app/algorithms/DFS/page.jsx", "src/app/algorithms/DynamicProgramming/page.jsx", "src/app/algorithms/Greedy/page.jsx", "src/app/algorithms/Recursion/page.jsx", "src/app/algorithms/SlidingWindow/page.jsx", "src/app/algorithms/Sorting/page.jsx", "src/app/algorithms/TwoPointer/page.jsx", "src/app/components/Navbar.jsx"  ],
+, "src/app/algorithms/BFS/page.jsx", "src/app/algorithms/DFS/page.jsx", "src/app/algorithms/DynamicProgramming/page.jsx", "src/app/algorithms/Greedy/page.jsx", "src/app/algorithms/Recursion/page.jsx", "src/app/algorithms/SlidingWindow/page.jsx", "src/app/algorithms/Sorting/page.jsx", "src/app/algorithms/TwoPointer/page.jsx", "src/app/components/Navbar.jsx", "src/app/data-structures/arrays/page.jsx", "src/app/data-structures/graphs/page.jsx", "src/app/data-structures/hashmaps/page.jsx", "src/app/data-structures/linked-lists/page.jsx"  ],
   "exclude": [
     "node_modules"
   ]

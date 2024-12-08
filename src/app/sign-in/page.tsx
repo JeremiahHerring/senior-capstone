@@ -32,7 +32,7 @@ export default function SigninCard() {
     try {
       const res = await signinWithEmailAndPassword(email, password);
       console.log("User signed in:", res.user);
-      sessionStorage.setItem("user", true);
+      sessionStorage.setItem("user", JSON.stringify(res.user));
 
       // Clear form fields after successful sign-in
       setEmail("");
