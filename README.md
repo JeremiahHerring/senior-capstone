@@ -3,6 +3,7 @@
 Welcome to my Senior Capstone project! This document will guide you through the process of setting up, running, and testing the application.
 
 ## **Table of Contents**
+
 - [Prerequisites](#prerequisites)
 - [Installation](#installation)
 - [Running the Application](#running-the-application)

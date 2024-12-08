@@ -7,12 +7,11 @@ import {
   Heading,
   Text,
   Button,
-  Stack,
   useToast,
   Input,
   VStack,
   Spinner,
-  Icon
+  Icon,
 } from "@chakra-ui/react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth, db } from "../firebase/firebaseConfig";
@@ -46,8 +45,8 @@ const Profile = () => {
         if (userDoc.exists()) {
           const data = userDoc.data();
           setUserData(data);
-          setFirstName(data.firstName); 
-          setLastName(data.lastName); 
+          setFirstName(data.firstName);
+          setLastName(data.lastName);
         } else {
           toast({
             title: "Error",
@@ -79,7 +78,7 @@ const Profile = () => {
       const userDocRef = doc(db, "users", user.uid);
       await updateDoc(userDocRef, {
         firstName,
-        lastName, 
+        lastName,
       });
 
       setUserData((prev) => ({ ...prev, firstName, lastName }));
@@ -108,10 +107,10 @@ const Profile = () => {
       // Step 1: Delete Firestore user document
       const userDocRef = doc(db, "users", user.uid);
       await deleteDoc(userDocRef);
-  
+
       // Step 2: Delete Firebase Authentication user
       await auth.currentUser.delete();
-  
+
       // Step 3: Notify success and redirect
       toast({
         title: "Account Deleted",
@@ -120,11 +119,11 @@ const Profile = () => {
         duration: 5000,
         isClosable: true,
       });
-  
+
       router.push("/"); // Redirect to the main page
     } catch (error) {
       console.error("Error deleting account:", error);
-  
+
       // Handle re-authentication requirement
       if (error.code === "auth/requires-recent-login") {
         toast({
@@ -134,7 +133,7 @@ const Profile = () => {
           duration: 5000,
           isClosable: true,
         });
-  
+
         // Redirect to sign-in page
         router.push("/sign-in");
       } else {
@@ -148,7 +147,7 @@ const Profile = () => {
       }
     }
   };
-  
+
   if (loading) {
     return (
       <Flex justify="center" align="center" height="100vh">
@@ -164,11 +163,7 @@ const Profile = () => {
   return (
     <Box p={6} maxW="600px" mx="auto" mt={8}>
       <Flex align="center" mb={6} direction="column">
-        <Avatar 
-          size="xl" 
-          mb={4} 
-          icon={<Icon as={FaUser} boxSize="2em"/>}
-         />
+        <Avatar size="xl" mb={4} icon={<Icon as={FaUser} boxSize="2em" />} />
         <Heading as="h1" size="lg">
           Hello, {userData.firstName}!
         </Heading>

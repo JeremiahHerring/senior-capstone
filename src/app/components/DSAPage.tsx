@@ -7,7 +7,6 @@ import {
   Button,
   Heading,
   Text,
-  VStack,
   Select,
   Stack,
   Image,
@@ -24,14 +23,14 @@ const DataStructurePage = ({
   initialCode,
   language,
   images,
-  moduleId, 
-  userId, 
+  moduleId,
+  userId,
 }) => {
   const [code, setCode] = useState(initialCode || "");
   const [output, setOutput] = useState("");
   const [isRunning, setIsRunning] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState(
-    language || "python"
+    language || "python",
   );
   const router = useRouter();
   const toast = useToast();
@@ -64,7 +63,7 @@ const DataStructurePage = ({
             "x-rapidapi-host": "judge0-ce.p.rapidapi.com",
             "x-rapidapi-key": process.env.NEXT_PUBLIC_RAPID_API_KEY,
           },
-        }
+        },
       );
 
       const token = submissionResponse.data.token;
@@ -81,7 +80,7 @@ const DataStructurePage = ({
               "x-rapidapi-host": "judge0-ce.p.rapidapi.com",
               "x-rapidapi-key": process.env.NEXT_PUBLIC_RAPID_API_KEY,
             },
-          }
+          },
         );
 
         if (
@@ -120,7 +119,7 @@ const DataStructurePage = ({
   const markAsCompleted = async () => {
     if (!userId) {
       console.error(
-        "User ID is undefined. Cannot mark the module as completed."
+        "User ID is undefined. Cannot mark the module as completed.",
       );
       toast({
         title: "Error",

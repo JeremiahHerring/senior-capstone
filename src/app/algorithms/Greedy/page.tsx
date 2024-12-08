@@ -90,7 +90,7 @@ print(min_coins${testCase.input})`,
               "x-rapidapi-host": "judge0-ce.p.rapidapi.com",
               "x-rapidapi-key": process.env.NEXT_PUBLIC_RAPID_API_KEY,
             },
-          }
+          },
         );
 
         const token = submissionResponse.data.token;
@@ -105,9 +105,9 @@ print(min_coins${testCase.input})`,
             {
               headers: {
                 "x-rapidapi-host": "judge0-ce.p.rapidapi.com",
-                "x-rapidapi-key": process.env.NEXT_PUBLIC_RAPID_API_KEY
+                "x-rapidapi-key": process.env.NEXT_PUBLIC_RAPID_API_KEY,
               },
-            }
+            },
           );
 
           if (
