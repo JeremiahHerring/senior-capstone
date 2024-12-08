@@ -4,6 +4,7 @@ Welcome to my Senior Capstone project! This document will guide you through the 
 
 ## **Table of Contents**
 
+- [Introduction](#introduction)
 - [Prerequisites](#prerequisites)
 - [Installation](#installation)
 - [Running the Application](#running-the-application)
@@ -13,6 +14,10 @@ Welcome to my Senior Capstone project! This document will guide you through the 
 - [Conclusion](#conclusion)
 
 ---
+
+## **Introduction**
+
+If you're a user who wants to access the application, simply go to the website link: [link](https://algo-mastery.netlify.app/)
 
 ## **Prerequisites**
 
