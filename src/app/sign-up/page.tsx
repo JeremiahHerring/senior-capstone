@@ -24,7 +24,7 @@ import { auth, db } from "../firebase/firebaseConfig";
 import { doc, setDoc } from "firebase/firestore";
 import { useRouter } from "next/navigation";
 
-export async function addUserToDatabase(userId, userData) {
+async function addUserToDatabase(userId, userData) {
   try {
     await setDoc(doc(db, "users", userId), userData);
     console.log("User added to database with ID:", userId);
