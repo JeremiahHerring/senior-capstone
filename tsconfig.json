@@ -28,7 +28,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "src/app/sign-up/page.jsx",
+    "src/app/sign-up/page.tsx",
     "src/app/firebase/firebaseConfig.js",
     "src/app/page.jsx",
     "jest.config.ts",
