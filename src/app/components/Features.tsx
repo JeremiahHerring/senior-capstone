@@ -18,7 +18,6 @@ export default function Features() {
         flex={1}
         zIndex={0}
         display={{ base: "none", lg: "flex" }}
-        backgroundImage="url('/templates/stats-grid-with-image.png')"
         backgroundSize={"cover"}
         backgroundPosition="center"
         backgroundRepeat="no-repeat"

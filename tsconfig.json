@@ -1,10 +1,15 @@
 {
   "compilerOptions": {
     "baseUrl": "./",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
-    "strict": true,
+    //"strict": true,
+    "noImplicitAny": false,
     "noEmit": true,
     "esModuleInterop": true,
     "module": "esnext",
@@ -19,9 +24,12 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": [
+        "./src/*"
+      ]
     },
-    "target": "ES2017"
+    "target": "ES2017",
+    "strict": false
   },
   "include": [
     "next-env.d.ts",
@@ -33,6 +41,8 @@
     "src/app/page.jsx",
     "jest.config.ts",
     "cypress.config.js"
-  ],
-  "exclude": ["node_modules"]
+, "src/app/algorithms/BFS/page.jsx", "src/app/algorithms/DFS/page.jsx", "src/app/algorithms/DynamicProgramming/page.jsx", "src/app/algorithms/Greedy/page.jsx", "src/app/algorithms/Recursion/page.jsx", "src/app/algorithms/SlidingWindow/page.jsx", "src/app/algorithms/Sorting/page.jsx", "src/app/algorithms/TwoPointer/page.jsx", "src/app/components/Navbar.jsx"  ],
+  "exclude": [
+    "node_modules"
+  ]
 }
