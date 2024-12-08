@@ -45,6 +45,7 @@ const Navbar = () => {
     router.push('/profile');
   }
 
+
   return (
     <Box>
       <Flex
@@ -106,6 +107,7 @@ const Navbar = () => {
               </MenuButton>
               <MenuList>
                 <MenuItem onClick={handleProfileRedirect}>Profile</MenuItem>
+                <MenuItem onClick={handleProgressRedirect}>Progress</MenuItem>
                 <MenuDivider />
                 <MenuItem onClick={handleSignOut}>Sign Out</MenuItem>
               </MenuList>
@@ -278,8 +280,8 @@ const NAV_ITEMS = [
       },
     ],
   },
-  { label: 'About', href: '/about' },
-  { label: 'Contact', href: '/contact' },
+  { label: 'About', href: '/' },
+  { label: 'Contact', href: '/' },
 ];
 
 export default Navbar;
