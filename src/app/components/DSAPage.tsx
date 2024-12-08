@@ -1,6 +1,20 @@
 import React, { useState } from "react";
 import Editor from "@monaco-editor/react";
 import axios from "axios";
+import {
+  Box,
+  Button,
+  Heading,
+  Text,
+  VStack,
+  Select,
+  HStack,
+  Stack,
+  Flex,
+  Image,
+  useToast,
+} from "@chakra-ui/react";
+import { useRouter } from "next/navigation";
 
 const DataStructurePage = ({
   title,
@@ -13,13 +27,15 @@ const DataStructurePage = ({
   const [output, setOutput] = useState("");
   const [isRunning, setIsRunning] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState(language || "python");
+  const router = useRouter();
+  const toast = useToast();
 
   const languageIdMap = {
     javascript: 63, // JavaScript (Node.js)
-    python: 71,     // Python 3
-    java: 62,       // Java (OpenJDK 13.0.1)
-    c: 50,          // C (GCC 9.2.0)
-    cpp: 54,        // C++ (GCC 9.2.0)
+    python: 71, // Python 3
+    java: 62, // Java (OpenJDK 13.0.1)
+    c: 50, // C (GCC 9.2.0)
+    cpp: 54, // C++ (GCC 9.2.0)
   };
 
   const handleLanguageChange = (e) => {
@@ -45,7 +61,6 @@ const DataStructurePage = ({
             "Content-Type": "application/json",
             "x-rapidapi-host": "judge0-ce.p.rapidapi.com",
             "x-rapidapi-key": process.env.NEXT_PUBLIC_RAPID_API_KEY,
-            useQueryString: true,
           },
         }
       );
@@ -63,10 +78,7 @@ const DataStructurePage = ({
           }
         );
 
-        if (
-          resultResponse.data.status.id === 1 || // Submitted
-          resultResponse.data.status.id === 2    // In Queue
-        ) {
+        if (resultResponse.data.status.id === 1 || resultResponse.data.status.id === 2) {
           await new Promise((resolve) => setTimeout(resolve, 1000));
           retries += 1;
         } else {
@@ -97,32 +109,49 @@ const DataStructurePage = ({
   };
 
   return (
-    <div className="container mx-auto p-6">
+    <Box maxW="6xl" mx="auto" p={6}>
+      {/* Back to Dashboard Button */}
+      <Button
+        mb={6}
+        colorScheme="gray"
+        onClick={() => router.push("/dashboard")}
+      >
+        Back to Dashboard
+      </Button>
+
       {/* Title */}
-      <h1 className="text-4xl font-bold mb-6 text-center">{title}</h1>
+      <Heading as="h1" fontSize="5xl" fontWeight="bold" textAlign="center" mb={6}>
+        {title}
+      </Heading>
 
       {/* Description Section */}
-      <section className="mb-8">
-        <h2 className="text-2xl font-semibold mb-4">Description</h2>
-        <p className="text-gray-700 whitespace-pre-line leading-relaxed">{description}</p>
-      </section>
+      <Box mb={8}>
+        <Heading as="h2" fontSize="3xl" fontWeight="bold" mb={4}>
+          Description
+        </Heading>
+        <Text fontSize="lg" color="gray.600">
+          {description}
+        </Text>
+      </Box>
 
       {/* Code Editor Section */}
-      <section className="mb-8">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-2xl font-semibold">Try It Yourself</h2>
-          <select
+      <Box mb={8}>
+        <Flex justifyContent="space-between" alignItems="center" mb={4}>
+          <Heading as="h2" fontSize="2xl">
+            Try It Yourself
+          </Heading>
+          <Select
             value={selectedLanguage}
             onChange={handleLanguageChange}
-            className="border border-gray-300 rounded px-3 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            width="200px"
           >
             <option value="javascript">JavaScript</option>
             <option value="python">Python</option>
             <option value="java">Java</option>
             <option value="c">C</option>
             <option value="cpp">C++</option>
-          </select>
-        </div>
+          </Select>
+        </Flex>
         <Editor
           height="400px"
           language={selectedLanguage}
@@ -135,41 +164,44 @@ const DataStructurePage = ({
             automaticLayout: true,
           }}
         />
-        <button
+        <Button
+          mt={4}
+          colorScheme="blue"
+          isLoading={isRunning}
           onClick={runCode}
-          disabled={isRunning}
-          className={`mt-4 px-6 py-2 rounded-lg ${
-            isRunning
-              ? "bg-gray-400 cursor-not-allowed"
-              : "bg-blue-600 hover:bg-blue-700 text-white"
-          } transition-colors duration-200`}
         >
           {isRunning ? "Running..." : "Run Code"}
-        </button>
-        {/* Output Section */}
-        <div className="mt-6 bg-gray-900 text-white p-4 rounded-lg">
-          <h3 className="text-lg font-semibold mb-2">Output:</h3>
-          <pre className="whitespace-pre-wrap">{output}</pre>
-        </div>
-      </section>
+        </Button>
+        <Box mt={6} bg="gray.800" color="white" p={4} borderRadius="md">
+          <Heading as="h3" fontSize="lg" mb={2}>
+            Output:
+          </Heading>
+          <Text fontFamily="monospace" whiteSpace="pre-wrap">
+            {output}
+          </Text>
+        </Box>
+      </Box>
 
       {/* Visualization Section */}
       {images?.length > 0 && (
-        <section>
-          <h2 className="text-2xl font-semibold mb-4">Visualization</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <Box>
+          <Heading as="h2" fontSize="2xl" fontWeight="bold" mb={4}>
+            Visualization
+          </Heading>
+          <Stack direction={["column", "row"]} spacing={4}>
             {images.map((imgSrc, index) => (
-              <img
+              <Image
                 key={index}
                 src={imgSrc}
                 alt={`${title} visualization ${index + 1}`}
-                className="w-full h-auto rounded-lg shadow"
+                borderRadius="md"
+                boxShadow="lg"
               />
             ))}
-          </div>
-        </section>
+          </Stack>
+        </Box>
       )}
-    </div>
+    </Box>
   );
 };
 

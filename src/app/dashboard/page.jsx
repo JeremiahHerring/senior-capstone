@@ -1,40 +1,37 @@
 "use client";
+
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth, db } from "../firebase/firebaseConfig";
 import { useRouter } from "next/navigation";
-import { signOut } from "firebase/auth";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { useState, useEffect } from "react";
 import {
   Box,
-  Button,
   Heading,
   Grid,
-  GridItem,
-  Text,
   VStack,
   HStack,
   Link,
   Divider,
+  Text,
 } from "@chakra-ui/react";
-
 import MultistepForm from "../components/MultistepForm";
 
 export default function Dashboard() {
-  const [user] = useAuthState(auth);
+  const [user, loading, error] = useAuthState(auth); // React Firebase hook
   const router = useRouter();
   const [isQuestionnaireCompleted, setIsQuestionnaireCompleted] = useState(false);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchQuestionnaireStatus = async () => {
-      if (!user) {
-        if (!sessionStorage.getItem("user")) {
-          router.push("/sign-in");
-          return;
-        }
-      }
+    if (loading) return; // Wait until user authentication status is resolved
 
+    if (!user) {
+      // If no user is authenticated, redirect to the sign-in page
+      router.push("/sign-in");
+      return;
+    }
+
+    const fetchQuestionnaireStatus = async () => {
       try {
         const userDocRef = doc(db, "users", user.uid);
         const userDoc = await getDoc(userDocRef);
@@ -47,19 +44,11 @@ export default function Dashboard() {
         }
       } catch (error) {
         console.error("Error fetching user questionnaire status:", error);
-      } finally {
-        setLoading(false);
       }
     };
 
-    if (user) fetchQuestionnaireStatus();
-  }, [user, router]);
-
-  const handleLogout = () => {
-    signOut(auth);
-    sessionStorage.removeItem("user");
-    router.push("/sign-in");
-  };
+    fetchQuestionnaireStatus();
+  }, [user, loading, router]);
 
   const handleQuestionnaireCompletion = async () => {
     try {
@@ -72,7 +61,19 @@ export default function Dashboard() {
   };
 
   if (loading) {
-    return <p>Loading...</p>;
+    return (
+      <Box textAlign="center" mt={8}>
+        <Text>Loading...</Text>
+      </Box>
+    );
+  }
+
+  if (error) {
+    return (
+      <Box textAlign="center" mt={8}>
+        <Text color="red.500">An error occurred: {error.message}</Text>
+      </Box>
+    );
   }
 
   return (
@@ -81,9 +82,6 @@ export default function Dashboard() {
         <Heading as="h1" size="lg">
           Dashboard
         </Heading>
-        <Button colorScheme="red" onClick={handleLogout}>
-          Log out
-        </Button>
       </HStack>
 
       {!isQuestionnaireCompleted ? (

@@ -17,10 +17,11 @@ import {
   Link,
   useToast,
 } from "@chakra-ui/react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
 import { auth, db } from "../firebase/firebaseConfig";
+import { GithubAuthProvider, signInWithPopup } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import { useRouter } from "next/navigation";
 
@@ -31,38 +32,29 @@ export async function addUserToDatabase(userId, userData) {
     return true;
   } catch (error) {
     console.error("Error adding user to database", error);
-    throw error; // Propagate the error to handle it upstream
+    throw error;
   }
 }
 
 export default function SignupCard() {
-  // State for form fields
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
 
-  // Destructure all values from the hook
-  const [
-    createUserWithEmailAndPassword,
-    userCredential,
-    loading,
-    firebaseError,
-  ] = useCreateUserWithEmailAndPassword(auth);
-
+  const [createUserWithEmailAndPassword] = useCreateUserWithEmailAndPassword(auth);
   const toast = useToast();
 
-  // Handle sign up and form submission
   const handleSignup = async (e) => {
     e.preventDefault();
 
-    // Basic validation
-    if (!email || !password) {
+    if (!firstName || !lastName || !email || !password) {
       toast({
         title: "Missing information.",
-        description: "Please provide both email and password.",
+        description: "Please provide all required fields.",
         status: "warning",
         duration: 5000,
         isClosable: true,
@@ -70,95 +62,48 @@ export default function SignupCard() {
       return;
     }
 
-    // Optionally, add more validation (e.g., email format, password strength)
+    setLoading(true);
 
-    // Attempt to create a user with email and password
-    await createUserWithEmailAndPassword(email, password);
-  };
-
-  useEffect(() => {
-    if (userCredential) {
+    try {
+      const userCredential = await createUserWithEmailAndPassword(email, password);
       const user = userCredential.user;
-      console.log("User signed up:", user);
 
       const userData = {
         firstName,
         lastName,
         email: user.email,
         createdAt: new Date(),
-        questionnaireTaken: false
+        questionnaireTaken: false,
       };
 
-      addUserToDatabase(user.uid, userData)
-        .then(() => {
-          console.log("User added to database successfully");
+      await addUserToDatabase(user.uid, userData);
 
-          // Store user status in session storage
-          sessionStorage.setItem("user", true);
+      toast({
+        title: "Account created.",
+        description: "Your account has been successfully created.",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+      });
 
-          // Clear the form fields after submission
-          setFirstName("");
-          setLastName("");
-          setEmail("");
-          setPassword("");
-          router.push("/dashboard");
-        })
-        .catch((error) => {
-          console.error("Error adding user to database:", error);
-          toast({
-            title: "Database error.",
-            description: `Error: ${error.message}`,
-            status: "error",
-            duration: 5000,
-            isClosable: true,
-          });
-        });
+      setFirstName("");
+      setLastName("");
+      setEmail("");
+      setPassword("");
+      router.push("/dashboard");
+    } catch (error) {
+      console.error("Error signing up:", error);
+      toast({
+        title: "Error signing up.",
+        description: error.message,
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+    } finally {
+      setLoading(false);
     }
-  }, [userCredential, firstName, lastName, email, router, toast]);
-
-  useEffect(() => {
-    if (firebaseError) {
-      console.error("Signup error:", firebaseError);
-      // Handle specific Firebase Auth error codes with toast notifications
-      switch (firebaseError.code) {
-        case "auth/email-already-in-use":
-          toast({
-            title: "Email already in use.",
-            description: "Please use a different email or log in.",
-            status: "error",
-            duration: 5000,
-            isClosable: true,
-          });
-          break;
-        case "auth/invalid-email":
-          toast({
-            title: "Invalid email address.",
-            description: "Please enter a valid email address.",
-            status: "error",
-            duration: 5000,
-            isClosable: true,
-          });
-          break;
-        case "auth/weak-password":
-          toast({
-            title: "Weak password.",
-            description: "Please choose a stronger password.",
-            status: "error",
-            duration: 5000,
-            isClosable: true,
-          });
-          break;
-        default:
-          toast({
-            title: "Sign up error.",
-            description: `Error: ${firebaseError.message}`,
-            status: "error",
-            duration: 5000,
-            isClosable: true,
-          });
-      }
-    }
-  }, [firebaseError, toast]);
+  };
 
   return (
     <Flex
@@ -169,9 +114,7 @@ export default function SignupCard() {
     >
       <Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6}>
         <Stack align={"center"}>
-          <Heading fontSize={"4xl"} textAlign={"center"}>
-            Sign up
-          </Heading>
+          <Heading fontSize={"4xl"}>Sign up</Heading>
           <Text fontSize={"lg"} color={"gray.600"}>
             to enjoy all of our cool features ✌️
           </Text>
@@ -196,7 +139,7 @@ export default function SignupCard() {
                   </FormControl>
                 </Box>
                 <Box>
-                  <FormControl id="lastName">
+                  <FormControl id="lastName" isRequired>
                     <FormLabel>Last Name</FormLabel>
                     <Input
                       type="text"
@@ -249,10 +192,12 @@ export default function SignupCard() {
                   Sign up
                 </Button>
               </Stack>
+              <Stack spacing={6}>
+              </Stack>
               <Stack pt={6}>
                 <Text align={"center"}>
                   Already a user?{" "}
-                  <Link href="/login" color={"blue.400"}>
+                  <Link href="/sign-in" color={"blue.400"}>
                     Login
                   </Link>
                 </Text>
