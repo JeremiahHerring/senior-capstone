@@ -20,7 +20,8 @@ import MultistepForm from "../components/MultistepForm";
 export default function Dashboard() {
   const [user, loading, error] = useAuthState(auth);
   const router = useRouter();
-  const [isQuestionnaireCompleted, setIsQuestionnaireCompleted] = useState(false);
+  const [isQuestionnaireCompleted, setIsQuestionnaireCompleted] =
+    useState(false);
   const [completedModules, setCompletedModules] = useState({});
 
   useEffect(() => {
@@ -90,27 +91,85 @@ export default function Dashboard() {
       ) : (
         <VStack spacing={8} align="stretch">
           <Section title="Algorithms">
-            <Grid templateColumns="repeat(auto-fill, minmax(200px, 1fr))" gap={4}>
-              <LinkBox href="/algorithms/Backtracking" label="Backtracking" isCompleted={completedModules.Backtracking} />
-              <LinkBox href="/algorithms/BFS" label="Breadth-First Search (BFS)" isCompleted={completedModules.BFS} />
-              <LinkBox href="/algorithms/DFS" label="Depth-First Search (DFS)" isCompleted={completedModules.DFS} />
-              <LinkBox href="/algorithms/DynamicProgramming" label="Dynamic Programming" isCompleted={completedModules.DynamicProgramming} />
-              <LinkBox href="/algorithms/Greedy" label="Greedy Algorithms" isCompleted={completedModules.GreedyAlgorithms} />
-              <LinkBox href="/algorithms/Recursion" label="Recursion" isCompleted={completedModules.Recursion} />
-              <LinkBox href="/algorithms/SlidingWindow" label="Sliding Window" isCompleted={completedModules.SlidingWindow} />
-              <LinkBox href="/algorithms/Sorting" label="Sorting" isCompleted={completedModules.Sorting} />
-              <LinkBox href="/algorithms/TwoPointer" label="Two Pointer Techniques" isCompleted={completedModules.TwoPointer} />
+            <Grid
+              templateColumns="repeat(auto-fill, minmax(200px, 1fr))"
+              gap={4}
+            >
+              <LinkBox
+                href="/algorithms/Backtracking"
+                label="Backtracking"
+                isCompleted={completedModules.Backtracking}
+              />
+              <LinkBox
+                href="/algorithms/BFS"
+                label="Breadth-First Search (BFS)"
+                isCompleted={completedModules.BFS}
+              />
+              <LinkBox
+                href="/algorithms/DFS"
+                label="Depth-First Search (DFS)"
+                isCompleted={completedModules.DFS}
+              />
+              <LinkBox
+                href="/algorithms/DynamicProgramming"
+                label="Dynamic Programming"
+                isCompleted={completedModules.DynamicProgramming}
+              />
+              <LinkBox
+                href="/algorithms/Greedy"
+                label="Greedy Algorithms"
+                isCompleted={completedModules.GreedyAlgorithms}
+              />
+              <LinkBox
+                href="/algorithms/Recursion"
+                label="Recursion"
+                isCompleted={completedModules.Recursion}
+              />
+              <LinkBox
+                href="/algorithms/SlidingWindow"
+                label="Sliding Window"
+                isCompleted={completedModules.SlidingWindow}
+              />
+              <LinkBox
+                href="/algorithms/Sorting"
+                label="Sorting"
+                isCompleted={completedModules.Sorting}
+              />
+              <LinkBox
+                href="/algorithms/TwoPointer"
+                label="Two Pointer Techniques"
+                isCompleted={completedModules.TwoPointer}
+              />
             </Grid>
           </Section>
 
           <Divider />
 
           <Section title="Data Structures">
-            <Grid templateColumns="repeat(auto-fill, minmax(200px, 1fr))" gap={4}>
-              <LinkBox href="/data-structures/arrays" label="Arrays" isCompleted={completedModules.Arrays} />
-              <LinkBox href="/data-structures/graphs" label="Graphs" isCompleted={completedModules.Graphs} />
-              <LinkBox href="/data-structures/hashmaps" label="Hashmaps" isCompleted={completedModules.Hashmaps} />
-              <LinkBox href="/data-structures/linked-lists" label="Linked Lists" isCompleted={completedModules.LinkedLists} />
+            <Grid
+              templateColumns="repeat(auto-fill, minmax(200px, 1fr))"
+              gap={4}
+            >
+              <LinkBox
+                href="/data-structures/arrays"
+                label="Arrays"
+                isCompleted={completedModules.Arrays}
+              />
+              <LinkBox
+                href="/data-structures/graphs"
+                label="Graphs"
+                isCompleted={completedModules.Graphs}
+              />
+              <LinkBox
+                href="/data-structures/hashmaps"
+                label="Hashmaps"
+                isCompleted={completedModules.Hashmaps}
+              />
+              <LinkBox
+                href="/data-structures/linked-lists"
+                label="Linked Lists"
+                isCompleted={completedModules.LinkedLists}
+              />
             </Grid>
           </Section>
         </VStack>
@@ -141,7 +200,11 @@ function LinkBox({ href, label, isCompleted }) {
       bg={isCompleted ? "green.100" : "transparent"}
       _hover={{ textDecoration: "none", bg: "gray.100" }}
     >
-      <Text textAlign="center" fontWeight="medium" color={isCompleted ? "green.800" : "black"}>
+      <Text
+        textAlign="center"
+        fontWeight="medium"
+        color={isCompleted ? "green.800" : "black"}
+      >
         {label}
       </Text>
     </Link>

@@ -7,7 +7,6 @@ import {
   Heading,
   Flex,
   FormControl,
-  GridItem,
   FormLabel,
   Input,
   Select,
@@ -27,7 +26,10 @@ const Form1 = () => {
         <FormLabel htmlFor="ds_algo_knowledge" fontWeight={"normal"}>
           How would you rate your knowledge of Data Structures and Algorithms?
         </FormLabel>
-        <Select id="ds_algo_knowledge" placeholder="Select your knowledge level">
+        <Select
+          id="ds_algo_knowledge"
+          placeholder="Select your knowledge level"
+        >
           <option value="beginner">Beginner</option>
           <option value="intermediate">Intermediate</option>
           <option value="advanced">Advanced</option>
@@ -93,7 +95,8 @@ const Form3 = () => {
             focusBorderColor="brand.400"
           />
           <FormHelperText>
-            Any additional information that might help us tailor your experience.
+            Any additional information that might help us tailor your
+            experience.
           </FormHelperText>
         </FormControl>
       </SimpleGrid>
@@ -139,7 +142,13 @@ export default function MultistepForm({ onComplete }) {
       m="10px auto"
       as="form"
     >
-      <Progress hasStripe value={progress} mb="5%" mx="5%" isAnimated></Progress>
+      <Progress
+        hasStripe
+        value={progress}
+        mb="5%"
+        mx="5%"
+        isAnimated
+      ></Progress>
       {step === 1 ? <Form1 /> : step === 2 ? <Form2 /> : <Form3 />}
       <ButtonGroup mt="5%" w="100%">
         <Flex w="100%" justifyContent="space-between">
@@ -166,7 +175,12 @@ export default function MultistepForm({ onComplete }) {
             )}
           </Flex>
           {step === 3 && (
-            <Button w="7rem" colorScheme="red" variant="solid" onClick={handleSubmit}>
+            <Button
+              w="7rem"
+              colorScheme="red"
+              variant="solid"
+              onClick={handleSubmit}
+            >
               Submit
             </Button>
           )}

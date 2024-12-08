@@ -92,7 +92,7 @@ print(fibonacci(${testCase.input}))`,
               "x-rapidapi-host": "judge0-ce.p.rapidapi.com",
               "x-rapidapi-key": process.env.NEXT_PUBLIC_RAPID_API_KEY,
             },
-          }
+          },
         );
 
         const token = submissionResponse.data.token;
@@ -109,7 +109,7 @@ print(fibonacci(${testCase.input}))`,
                 "x-rapidapi-host": "judge0-ce.p.rapidapi.com",
                 "x-rapidapi-key": process.env.NEXT_PUBLIC_RAPID_API_KEY,
               },
-            }
+            },
           );
 
           if (

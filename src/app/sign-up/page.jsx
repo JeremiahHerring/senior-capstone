@@ -21,7 +21,6 @@ import { useState } from "react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
 import { auth, db } from "../firebase/firebaseConfig";
-import { GithubAuthProvider, signInWithPopup } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import { useRouter } from "next/navigation";
 
@@ -45,7 +44,8 @@ export default function SignupCard() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
-  const [createUserWithEmailAndPassword] = useCreateUserWithEmailAndPassword(auth);
+  const [createUserWithEmailAndPassword] =
+    useCreateUserWithEmailAndPassword(auth);
   const toast = useToast();
 
   const handleSignup = async (e) => {
@@ -65,7 +65,10 @@ export default function SignupCard() {
     setLoading(true);
 
     try {
-      const userCredential = await createUserWithEmailAndPassword(email, password);
+      const userCredential = await createUserWithEmailAndPassword(
+        email,
+        password,
+      );
       const user = userCredential.user;
 
       const userData = {
@@ -192,8 +195,7 @@ export default function SignupCard() {
                   Sign up
                 </Button>
               </Stack>
-              <Stack spacing={6}>
-              </Stack>
+              <Stack spacing={6}></Stack>
               <Stack pt={6}>
                 <Text align={"center"}>
                   Already a user?{" "}
