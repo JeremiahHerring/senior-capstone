@@ -29,6 +29,8 @@ They consist of vertices (nodes) connected by edges and can be directed or undir
 Applications include social networks, shortest path algorithms, and network routing.
   `;
 
+  const images = ["../assets/graph1.png"];
+
   const problemDescription = `
 Your task: Write a class to represent a graph using an adjacency list.
 The class should support adding vertices, adding edges, and displaying the graph.
@@ -206,6 +208,7 @@ graph.display()`,
     <DataStructurePage
       title={title}
       description={description}
+      images={images}
       problemDescription={problemDescription}
       initialCode={initialCode}
       language={language}

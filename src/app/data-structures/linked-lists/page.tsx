@@ -29,6 +29,8 @@ They are dynamic in nature and allow efficient insertion and deletion.
 Applications include implementing stacks, queues, and adjacency lists for graphs.
   `;
 
+  const images = ["../assets/linked-lists.png"];
+
   const problemDescription = `
 Your task: Implement a singly linked list in Python with the following functionalities:
 1. **Append**: Add a new node to the end of the list.
@@ -219,6 +221,7 @@ print("Size:", list.size())
     <DataStructurePage
       title={title}
       description={description}
+      images={images}
       problemDescription={problemDescription}
       initialCode={initialCode}
       language={language}

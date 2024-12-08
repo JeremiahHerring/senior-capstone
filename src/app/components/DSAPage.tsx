@@ -24,8 +24,8 @@ const DataStructurePage = ({
   initialCode,
   language,
   images,
-  moduleId, // Unique ID for the module (e.g., "Backtracking")
-  userId, // Current user's ID
+  moduleId, 
+  userId, 
 }) => {
   const [code, setCode] = useState(initialCode || "");
   const [output, setOutput] = useState("");

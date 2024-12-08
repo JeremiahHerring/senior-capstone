@@ -29,6 +29,8 @@ They provide efficient lookup, insertion, and deletion operations.
 Applications include caching, counting frequencies, and database indexing.
   `;
 
+  const images = ["../assets/hashmaps.png"];
+
   const problemDescription = `
 Your task: Write a function to count the frequencies of elements in a given list.
 The function should return a dictionary where keys are elements of the list, and values are their frequencies.
@@ -172,6 +174,7 @@ print(count_frequencies([1, 2, 2, 3, 3, 3]))
     <DataStructurePage
       title={title}
       description={description}
+      images={images}
       problemDescription={problemDescription}
       initialCode={initialCode}
       language={language}

@@ -29,6 +29,8 @@ They allow random access and are used in a variety of applications.
 Examples include finding the maximum element, searching, and sorting.
   `;
 
+  const images = ["../assets/array.png"];
+
   const problemDescription = `
 Your task: Write a function to find the maximum element in a given array of integers.
 Example:
@@ -171,6 +173,7 @@ print(find_max${testCase.input})`,
     <DataStructurePage
       title={title}
       description={description}
+      images={images}
       problemDescription={problemDescription}
       initialCode={initialCode}
       language={language}

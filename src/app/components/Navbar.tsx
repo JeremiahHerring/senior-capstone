@@ -19,14 +19,15 @@ import {
   PopoverContent,
   useColorModeValue,
   useDisclosure,
-  Collapse
+  Collapse,
+  Icon
 } from '@chakra-ui/react';
 import { HamburgerIcon, CloseIcon, ChevronDownIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../firebase/firebaseConfig';
 import { signOut } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
-
+import { FaUser } from 'react-icons/fa';
 
 const Navbar = () => {
   const { isOpen, onToggle } = useDisclosure();
@@ -43,6 +44,10 @@ const Navbar = () => {
 
   const handleProfileRedirect = () => {
     router.push('/profile');
+  }
+
+  const handleProgressRedirect = () => {
+    router.push('/progress');
   }
 
 
@@ -77,7 +82,7 @@ const Navbar = () => {
         <Flex flex={{ base: 1 }} justify={{ base: 'center', md: 'start' }} align="center">
           <Box
             as="img"
-            src="./assets/logo.png"
+            src="../assets/logo.png"
             alt="Logo"
             onClick={() => (window.location.href = '/')}
             cursor="pointer"
@@ -101,8 +106,7 @@ const Navbar = () => {
               >
                 <Avatar
                   size={'md'}
-                  src={'https://via.placeholder.com/150'}
-                  alt="User Profile"
+                  icon={<Icon as={FaUser} boxSize="2em" />} // Fallback to a user icon
                 />
               </MenuButton>
               <MenuList>
@@ -276,7 +280,7 @@ const NAV_ITEMS = [
       {
         label: 'Mastery of DSA',
         subLabel: 'Master data structures and algorithms.',
-        href: '/dsa-mastery',
+        href: '/dashboard',
       },
     ],
   },
