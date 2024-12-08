@@ -110,7 +110,7 @@ const stats = [
     title: "10+",
     content: (
       <>
-        <StatsText>Leaning Metrics</StatsText> where you can see how you're
+        <StatsText>Leaning Metrics</StatsText> where you can see how you&apos;re
         improving
       </>
     ),
