@@ -4,7 +4,6 @@ import {
   Box,
   Flex,
   Avatar,
-  HStack,
   Text,
   IconButton,
   Button,
@@ -25,8 +24,6 @@ import {
 import {
   HamburgerIcon,
   CloseIcon,
-  ChevronDownIcon,
-  ChevronRightIcon,
 } from "@chakra-ui/icons";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../firebase/firebaseConfig";
@@ -253,7 +250,7 @@ const MobileNav = () => (
 );
 
 const MobileNavItem = ({ label, children, href }) => {
-  const { isOpen, onToggle } = useDisclosure();
+  const { onToggle } = useDisclosure();
 
   return (
     <Stack spacing={4} onClick={children && onToggle}>

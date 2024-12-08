@@ -20,7 +20,7 @@ const ProgressPage = () => {
   const [user, loading, error] = useAuthState(auth);
   const [progress, setProgress] = useState(0);
   const [completedModules, setCompletedModules] = useState([]);
-  const [totalModules, setTotalModules] = useState(13);
+  const [totalModules] = useState(13);
   useEffect(() => {
     if (loading) return;
 
