@@ -1,3 +1,4 @@
+"use client";
 import React, { useState } from "react";
 import Editor from "@monaco-editor/react";
 import axios from "axios";
@@ -8,20 +9,23 @@ import {
   Text,
   VStack,
   Select,
-  HStack,
   Stack,
-  Flex,
   Image,
   useToast,
 } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
+import { doc, updateDoc } from "firebase/firestore";
+import { db } from "../firebase/firebaseConfig";
 
 const DataStructurePage = ({
   title,
   description,
+  problemDescription,
   initialCode,
   language,
   images,
+  moduleId, // Unique ID for the module (e.g., "Backtracking")
+  userId, // Current user's ID
 }) => {
   const [code, setCode] = useState(initialCode || "");
   const [output, setOutput] = useState("");
@@ -31,11 +35,11 @@ const DataStructurePage = ({
   const toast = useToast();
 
   const languageIdMap = {
-    javascript: 63, // JavaScript (Node.js)
-    python: 71, // Python 3
-    java: 62, // Java (OpenJDK 13.0.1)
-    c: 50, // C (GCC 9.2.0)
-    cpp: 54, // C++ (GCC 9.2.0)
+    javascript: 63,
+    python: 71,
+    java: 62,
+    c: 50,
+    cpp: 54,
   };
 
   const handleLanguageChange = (e) => {
@@ -45,10 +49,6 @@ const DataStructurePage = ({
   const runCode = async () => {
     setIsRunning(true);
     setOutput("Running...");
-    const maxRetries = 10;
-    let retries = 0;
-    let result = null;
-
     try {
       const submissionResponse = await axios.post(
         "https://judge0-ce.p.rapidapi.com/submissions",
@@ -66,6 +66,10 @@ const DataStructurePage = ({
       );
 
       const token = submissionResponse.data.token;
+
+      let result = null;
+      const maxRetries = 10;
+      let retries = 0;
 
       while (!result && retries < maxRetries) {
         const resultResponse = await axios.get(
@@ -102,29 +106,47 @@ const DataStructurePage = ({
         setOutput("No output");
       }
     } catch (error) {
-      setOutput(`Error: ${error.response?.data?.error || "An unknown error occurred."}`);
+      setOutput(`Error: ${error.message}`);
     } finally {
       setIsRunning(false);
     }
   };
 
+  const markAsCompleted = async () => {
+    try {
+      const userDocRef = doc(db, "users", userId);
+      await updateDoc(userDocRef, {
+        [`completedModules.${moduleId}`]: true,
+      });
+      toast({
+        title: "Module Completed",
+        description: "Congratulations! You’ve successfully completed this module.",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+      });
+      router.push("/dashboard");
+    } catch (error) {
+      console.error("Error updating module completion:", error);
+      toast({
+        title: "Error",
+        description: "Failed to mark the module as completed.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+    }
+  };
+
   return (
     <Box maxW="6xl" mx="auto" p={6}>
-      {/* Back to Dashboard Button */}
-      <Button
-        mb={6}
-        colorScheme="gray"
-        onClick={() => router.push("/dashboard")}
-      >
+      <Button mb={6} colorScheme="gray" onClick={() => router.push("/dashboard")}>
         Back to Dashboard
       </Button>
-
-      {/* Title */}
       <Heading as="h1" fontSize="5xl" fontWeight="bold" textAlign="center" mb={6}>
         {title}
       </Heading>
 
-      {/* Description Section */}
       <Box mb={8}>
         <Heading as="h2" fontSize="3xl" fontWeight="bold" mb={4}>
           Description
@@ -134,58 +156,9 @@ const DataStructurePage = ({
         </Text>
       </Box>
 
-      {/* Code Editor Section */}
-      <Box mb={8}>
-        <Flex justifyContent="space-between" alignItems="center" mb={4}>
-          <Heading as="h2" fontSize="2xl">
-            Try It Yourself
-          </Heading>
-          <Select
-            value={selectedLanguage}
-            onChange={handleLanguageChange}
-            width="200px"
-          >
-            <option value="javascript">JavaScript</option>
-            <option value="python">Python</option>
-            <option value="java">Java</option>
-            <option value="c">C</option>
-            <option value="cpp">C++</option>
-          </Select>
-        </Flex>
-        <Editor
-          height="400px"
-          language={selectedLanguage}
-          value={code}
-          onChange={(value) => setCode(value)}
-          theme="vs-dark"
-          options={{
-            fontSize: 14,
-            minimap: { enabled: false },
-            automaticLayout: true,
-          }}
-        />
-        <Button
-          mt={4}
-          colorScheme="blue"
-          isLoading={isRunning}
-          onClick={runCode}
-        >
-          {isRunning ? "Running..." : "Run Code"}
-        </Button>
-        <Box mt={6} bg="gray.800" color="white" p={4} borderRadius="md">
-          <Heading as="h3" fontSize="lg" mb={2}>
-            Output:
-          </Heading>
-          <Text fontFamily="monospace" whiteSpace="pre-wrap">
-            {output}
-          </Text>
-        </Box>
-      </Box>
-
-      {/* Visualization Section */}
       {images?.length > 0 && (
-        <Box>
-          <Heading as="h2" fontSize="2xl" fontWeight="bold" mb={4}>
+        <Box mb={8}>
+          <Heading as="h2" fontSize="3xl" fontWeight="bold" mb={4}>
             Visualization
           </Heading>
           <Stack direction={["column", "row"]} spacing={4}>
@@ -201,6 +174,64 @@ const DataStructurePage = ({
           </Stack>
         </Box>
       )}
+
+      <Box mb={8}>
+        <Heading as="h2" fontSize="3xl" fontWeight="bold" mb={4}>
+          Problem
+        </Heading>
+        <Text fontSize="lg" color="gray.600" mb={6}>
+          {problemDescription}
+        </Text>
+
+        <Box>
+          <Stack direction={["column", "row"]} justify="space-between" mb={4}>
+            <Heading as="h3" fontSize="2xl">
+              Try It Yourself
+            </Heading>
+            <Select value={selectedLanguage} onChange={handleLanguageChange} width="200px">
+              <option value="javascript">JavaScript</option>
+              <option value="python">Python</option>
+              <option value="java">Java</option>
+              <option value="c">C</option>
+              <option value="cpp">C++</option>
+            </Select>
+          </Stack>
+          <Editor
+            height="400px"
+            language={selectedLanguage}
+            value={code}
+            onChange={(value) => setCode(value)}
+            theme="vs-dark"
+            options={{
+              fontSize: 14,
+              minimap: { enabled: false },
+              automaticLayout: true,
+            }}
+          />
+          <Button mt={4} colorScheme="blue" isLoading={isRunning} onClick={runCode}>
+            {isRunning ? "Running..." : "Run Code"}
+          </Button>
+          <Box mt={6} bg="gray.800" color="white" p={4} borderRadius="md">
+            <Heading as="h3" fontSize="lg" mb={2}>
+              Output:
+            </Heading>
+            <Text fontFamily="monospace" whiteSpace="pre-wrap">
+              {output}
+            </Text>
+          </Box>
+        </Box>
+      </Box>
+
+      {/* Mark as Completed Button */}
+      <Button
+        colorScheme="green"
+        size="lg"
+        mt={6}
+        width="full"
+        onClick={markAsCompleted}
+      >
+        Mark as Completed
+      </Button>
     </Box>
   );
 };

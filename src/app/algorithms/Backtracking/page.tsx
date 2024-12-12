@@ -8,38 +8,47 @@ const BacktrackingPage = () => {
   const [isCompleted, setIsCompleted] = useState(false);
   const toast = useToast();
 
-  const title = "Backtracking Algorithms";
+  const title = "Backtracking";
   const description = `
 Backtracking is a systematic method for solving constraint satisfaction problems.
 It builds incrementally towards a solution and abandons partial solutions that fail to satisfy the constraints.
-Your task: Write a function to solve the N-Queens problem for a given board size n.
+`;
+const problemDescription = `
+Your task: Write a function to find all possible subsets of a given list of grocery items.
+For example, given ['apple', 'banana', 'grapes'], your function should return all subsets, including the empty set and the full set.
 `;
 
   const initialCode = `
-// Example: Solve N-Queens Problem
-function solveNQueens(n) {
-  // Write your code here
-  return []; // Return an array of solutions
-}
+# Python: Find All Subsets of Grocery Items
+def find_subsets(items):
+    # Write your code here
+    return []  # Return all subsets
 
-// Example test case
-console.log(solveNQueens(4)); // Expected Output: [[".Q..","...Q","Q...","..Q."], ...]
+# Example Test Case
+print(find_subsets(['apple', 'banana', 'grapes']))
+# Expected Output: [[], ['apple'], ['banana'], ['grapes'], ['apple', 'banana'], ['apple', 'grapes'], ['banana', 'grapes'], ['apple', 'banana', 'grapes']]
 `;
 
-  const language = "javascript";
+  const language = "python";
 
   const testCases = [
-    { input: "4", expectedOutput: '[[".Q..","...Q","Q...","..Q."]]' },
-    { input: "1", expectedOutput: '[["Q"]]' },
+    {
+      input: `['apple', 'banana', 'grapes']`,
+      expectedOutput: "[[], ['apple'], ['banana'], ['grapes'], ['apple', 'banana'], ['apple', 'grapes'], ['banana', 'grapes'], ['apple', 'banana', 'grapes']]",
+    },
+    {
+      input: `['milk', 'bread']`,
+      expectedOutput: "[[], ['milk'], ['bread'], ['milk', 'bread']]",
+    },
   ];
 
   const handleCodeExecution = async (userCode) => {
     const languageIdMap = {
-      javascript: 63, // JavaScript (Node.js)
-      python: 71, // Python 3
-      java: 62, // Java (OpenJDK 13.0.1)
-      c: 50, // C (GCC 9.2.0)
-      cpp: 54, // C++ (GCC 9.2.0)
+      javascript: 63,
+      python: 71,
+      java: 62,
+      c: 50,
+      cpp: 54,
     };
 
     for (let i = 0; i < testCases.length; i++) {
@@ -51,7 +60,7 @@ console.log(solveNQueens(4)); // Expected Output: [[".Q..","...Q","Q...","..Q."]
           "https://judge0-ce.p.rapidapi.com/submissions",
           {
             source_code: `${userCode}
-            console.log(solveNQueens(${testCase.input}));`,
+print(find_subsets(${testCase.input}))`,
             language_id: languageIdMap[language],
           },
           {
@@ -132,6 +141,7 @@ console.log(solveNQueens(4)); // Expected Output: [[".Q..","...Q","Q...","..Q."]
     <DataStructurePage
       title={title}
       description={description}
+      problemDescription={problemDescription}
       initialCode={initialCode}
       language={language}
       onRunCode={handleCodeExecution}
