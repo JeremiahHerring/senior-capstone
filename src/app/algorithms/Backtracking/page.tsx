@@ -1,13 +1,28 @@
-'use client';
+"use client";
 import React, { useState } from "react";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth } from "../../firebase/firebaseConfig";
 import DataStructurePage from "../../components/DSAPage";
+import { useRouter } from "next/navigation";
 import { useToast } from "@chakra-ui/react";
 import axios from "axios";
 
 const BacktrackingPage = () => {
   const [isCompleted, setIsCompleted] = useState(false);
+  const [user, loading, error] = useAuthState(auth);
+  const router = useRouter();
   const toast = useToast();
 
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+
+  if (error || !user) {
+    router.push("/sign-in"); // Redirect if there's no authenticated user
+    return null;
+  }
+
+  const title = "Backtracking";
   const title = "Backtracking";
   const description = `
 Backtracking is a systematic method for solving constraint satisfaction problems.
@@ -27,8 +42,17 @@ def find_subsets(items):
 # Example Test Case
 print(find_subsets(['apple', 'banana', 'grapes']))
 # Expected Output: [[], ['apple'], ['banana'], ['grapes'], ['apple', 'banana'], ['apple', 'grapes'], ['banana', 'grapes'], ['apple', 'banana', 'grapes']]
+# Python: Find All Subsets of Grocery Items
+def find_subsets(items):
+    # Write your code here
+    return []  # Return all subsets
+
+# Example Test Case
+print(find_subsets(['apple', 'banana', 'grapes']))
+# Expected Output: [[], ['apple'], ['banana'], ['grapes'], ['apple', 'banana'], ['apple', 'grapes'], ['banana', 'grapes'], ['apple', 'banana', 'grapes']]
 `;
 
+  const language = "python";
   const language = "python";
 
   const testCases = [
@@ -49,17 +73,22 @@ print(find_subsets(['apple', 'banana', 'grapes']))
       java: 62,
       c: 50,
       cpp: 54,
+      javascript: 63,
+      python: 71,
+      java: 62,
+      c: 50,
+      cpp: 54,
     };
 
     for (let i = 0; i < testCases.length; i++) {
       const testCase = testCases[i];
 
       try {
-        // Submit user code with test case input
         const submissionResponse = await axios.post(
           "https://judge0-ce.p.rapidapi.com/submissions",
           {
             source_code: `${userCode}
+print(find_subsets(${testCase.input}))`,
 print(find_subsets(${testCase.input}))`,
             language_id: languageIdMap[language],
           },
@@ -69,12 +98,11 @@ print(find_subsets(${testCase.input}))`,
               "x-rapidapi-host": "judge0-ce.p.rapidapi.com",
               "x-rapidapi-key": process.env.NEXT_PUBLIC_RAPID_API_KEY,
             },
-          }
+          },
         );
 
         const token = submissionResponse.data.token;
 
-        // Poll for execution result
         let result = null;
         const maxRetries = 10;
         let retries = 0;
@@ -87,7 +115,7 @@ print(find_subsets(${testCase.input}))`,
                 "x-rapidapi-host": "judge0-ce.p.rapidapi.com",
                 "x-rapidapi-key": process.env.NEXT_PUBLIC_RAPID_API_KEY,
               },
-            }
+            },
           );
 
           if (
@@ -100,6 +128,17 @@ print(find_subsets(${testCase.input}))`,
             result = resultResponse.data;
             break;
           }
+        }
+
+        if (!result) {
+          toast({
+            title: "Error",
+            description: "Code execution timed out.",
+            status: "error",
+            duration: 5000,
+            isClosable: true,
+          });
+          return;
         }
 
         // Validate output
@@ -142,10 +181,13 @@ print(find_subsets(${testCase.input}))`,
       title={title}
       description={description}
       problemDescription={problemDescription}
+      problemDescription={problemDescription}
       initialCode={initialCode}
       language={language}
       onRunCode={handleCodeExecution}
       isCompleted={isCompleted}
+      moduleId="Backtracking" // Unique module identifier
+      userId={user.uid} // Pass userId from authentication
     />
   );
 };

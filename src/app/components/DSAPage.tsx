@@ -1,4 +1,5 @@
 "use client";
+"use client";
 import React, { useState } from "react";
 import Editor from "@monaco-editor/react";
 import axios from "axios";
@@ -7,7 +8,6 @@ import {
   Button,
   Heading,
   Text,
-  VStack,
   Select,
   Stack,
   Image,
@@ -16,25 +16,37 @@ import {
 import { useRouter } from "next/navigation";
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../firebase/firebaseConfig";
+import { doc, updateDoc } from "firebase/firestore";
+import { db } from "../firebase/firebaseConfig";
 
 const DataStructurePage = ({
   title,
   description,
   problemDescription,
+  problemDescription,
   initialCode,
   language,
   images,
+  moduleId,
+  userId,
   moduleId, // Unique ID for the module (e.g., "Backtracking")
   userId, // Current user's ID
 }) => {
   const [code, setCode] = useState(initialCode || "");
   const [output, setOutput] = useState("");
   const [isRunning, setIsRunning] = useState(false);
-  const [selectedLanguage, setSelectedLanguage] = useState(language || "python");
+  const [selectedLanguage, setSelectedLanguage] = useState(
+    language || "python",
+  );
   const router = useRouter();
   const toast = useToast();
 
   const languageIdMap = {
+    javascript: 63,
+    python: 71,
+    java: 62,
+    c: 50,
+    cpp: 54,
     javascript: 63,
     python: 71,
     java: 62,
@@ -62,10 +74,14 @@ const DataStructurePage = ({
             "x-rapidapi-host": "judge0-ce.p.rapidapi.com",
             "x-rapidapi-key": process.env.NEXT_PUBLIC_RAPID_API_KEY,
           },
-        }
+        },
       );
 
       const token = submissionResponse.data.token;
+
+      let result = null;
+      const maxRetries = 10;
+      let retries = 0;
 
       let result = null;
       const maxRetries = 10;
@@ -79,10 +95,13 @@ const DataStructurePage = ({
               "x-rapidapi-host": "judge0-ce.p.rapidapi.com",
               "x-rapidapi-key": process.env.NEXT_PUBLIC_RAPID_API_KEY,
             },
-          }
+          },
         );
 
-        if (resultResponse.data.status.id === 1 || resultResponse.data.status.id === 2) {
+        if (
+          resultResponse.data.status.id === 1 ||
+          resultResponse.data.status.id === 2
+        ) {
           await new Promise((resolve) => setTimeout(resolve, 1000));
           retries += 1;
         } else {
@@ -106,6 +125,7 @@ const DataStructurePage = ({
         setOutput("No output");
       }
     } catch (error) {
+      setOutput(`Error: ${error.message}`);
       setOutput(`Error: ${error.message}`);
     } finally {
       setIsRunning(false);

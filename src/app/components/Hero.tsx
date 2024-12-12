@@ -44,7 +44,9 @@ export default function Hero() {
               _hover={{
                 bg: "green.500",
               }}
-              onClick={() => {router.push("/dashboard")}}
+              onClick={() => {
+                router.push("/dashboard");
+              }}
             >
               Get Started
             </Button>
