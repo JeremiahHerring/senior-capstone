@@ -94,6 +94,7 @@ const Navbar = () => {
             onClick={() => (window.location.href = "/")}
             cursor="pointer"
             height="100px"
+            data-id="logo"
           />
           <Flex display={{ base: "none", md: "flex" }} ml={10}>
             <DesktopNav />
@@ -135,6 +136,7 @@ const Navbar = () => {
                 fontSize={"sm"}
                 fontWeight={400}
                 variant={"link"}
+                data-id={"open-sign-in-btn"}
                 href={"/sign-in"}
               >
                 Sign In
@@ -146,6 +148,7 @@ const Navbar = () => {
                 color={"white"}
                 bg={"pink.400"}
                 href={"/sign-up"}
+                data-id={"open-sign-up-btn"}
                 _hover={{ bg: "pink.300" }}
               >
                 Sign Up
