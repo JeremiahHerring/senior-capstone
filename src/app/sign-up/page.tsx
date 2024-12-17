@@ -69,6 +69,7 @@ export default function SignupCard() {
         email,
         password,
       );
+
       const user = userCredential.user;
 
       const userData = {
@@ -77,6 +78,9 @@ export default function SignupCard() {
         email: user.email,
         createdAt: new Date(),
         questionnaireTaken: false,
+        completedModules: { Backtracking: false, DynamicProgramming: false, GreedyAlgorithms: false, BFS: false, DFS: false, Sorting: false,
+          LinkedLists: false, Hashmaps: false, TwoPointer: false},
+         },
       };
 
       await addUserToDatabase(user.uid, userData);
