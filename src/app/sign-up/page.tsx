@@ -78,9 +78,18 @@ export default function SignupCard() {
         email: user.email,
         createdAt: new Date(),
         questionnaireTaken: false,
-        completedModules: { Backtracking: false, DynamicProgramming: false, GreedyAlgorithms: false, BFS: false, DFS: false, Sorting: false,
-          LinkedLists: false, Hashmaps: false, TwoPointer: false},
-         },
+        Arrays: false,
+        BFS: false,
+        Backtracking: false,
+        DynamicProgramming: false,
+        Graphs: false,
+        GreedyAlgorithms: false,
+        Hashmaps: false,
+        LinkedLists: false,
+        Recursion: false,
+        SlidingWindow: false,
+        Sorting: false,
+        TwoPointer: false
       };
 
       await addUserToDatabase(user.uid, userData);
