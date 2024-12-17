@@ -1,21 +1,11 @@
 describe("Sign-up and login flow", () => {
-  const userEmail = "john.doe@example.com";
+  // Function to generate a random email
+  const getRandomEmail = () => {
+    const randomString = Math.random().toString(36).substring(2, 10); // Generate random string
+    return `john.doe.${randomString}@example.com`;
+  };
 
-  before(() => {
-    // Check if the user exists before the test
-    cy.request("POST", "/api/checkUser", {
-      email: userEmail,
-    }).then((response) => {
-      if (response.body.auth) {
-        // If the user exists, delete the user and assert it was deleted
-        cy.request("DELETE", "/api/deleteUser", {
-          email: userEmail,
-        }).then((deleteResponse) => {
-          expect(deleteResponse.status).to.eq(200);
-        });
-      }
-    });
-  });
+  const userEmail = getRandomEmail();
 
   it("navigates to the sign-up page, submits user data, and redirects to the dashboard", () => {
     // Visit the sign-up page
